@@ -1,2 +1,59 @@
-# Customer-Management-
-A Spring Boot-based Customer Management System featuring RESTful APIs, JPA/Hibernate, and MariaDB for efficient data management.
+# 📌 Customer Management System (Spring Boot)
+
+## 📖 Overview
+This project is a **Customer Management System** developed using **Spring Boot**.  
+It provides a RESTful API to manage customer data, including creating, retrieving, updating, and deleting customer records.
+
+This system is built as part of an academic assignment and demonstrates practical backend development skills using Java and Spring Boot.
+
+---
+
+## 🚀 Features
+- ✅ Add new customers  
+- ✅ View all customers  
+- ✅ View customer by ID  
+- ✅ Update customer details  
+- ✅ Delete customers  
+- ✅ RESTful API design  
+- ✅ Database integration using JPA  
+
+---
+
+## 🛠️ Tech Stack
+- **Backend:** Java, Spring Boot  
+- **Database:** MySQL / H2  
+- **ORM:** Spring Data JPA (Hibernate)  
+- **Build Tool:** Maven  
+- **API Testing:** Postman  
+- **Version Control:** Git & GitHub  
+
+---
+
+## 📂 Project Structure
+src/
+├── main/
+│ ├── java/
+│ │ └── com.example.customermanagement/
+│ │ ├── controller/
+│ │ ├── service/
+│ │ ├── repository/
+│ │ └── model/
+│ └── resources/
+│ ├── application.properties
+│
+└── test/
+
+
+---
+
+## ⚙️ Setup & Installation
+
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/sasinduv/customer-management-.git
+cd customer-management-
+
+## 👤 Author
+
+Sasindu Gihan
+Undergraduate – University of Ruhuna
