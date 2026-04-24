@@ -53,7 +53,3 @@ src/
 git clone https://github.com/sasinduv/customer-management-.git
 cd customer-management-
 
-## 👤 Author
-
-Sasindu Gihan
-Undergraduate – University of Ruhuna
