@@ -13,5 +13,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query("SELECT c FROM Customer c WHERE c.name LIKE %:name%")
     List<Customer> findByNameContaining(@Param("name") String name);
+
+    boolean existsByNic(String nic);
 }    
 

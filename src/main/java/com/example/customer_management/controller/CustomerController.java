@@ -1,12 +1,14 @@
 package com.example.customer_management.controller;
 
+import com.example.customer_management.dto.CustomerRequestDto;
+import com.example.customer_management.dto.CustomerResponseDto;
 import com.example.customer_management.entity.Customer;
 import com.example.customer_management.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/customers")
 @CrossOrigin("*")
@@ -19,8 +21,9 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer save(@RequestBody @Valid Customer customer) {
-        return service.saveCustomer(customer);
+    public CustomerResponseDto createCustomer(
+            @Valid @RequestBody CustomerRequestDto requestDto) {
+        return service.createCustomer(requestDto);
     }
 
     @GetMapping

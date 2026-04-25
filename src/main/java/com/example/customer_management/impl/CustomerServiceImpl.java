@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -26,5 +27,8 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findAll();
     }
 
+    if (customerRepository.existsByNic(requestDto.getNic())) {
+    throw new RuntimeException("NIC already exists");
+}
     
 }
