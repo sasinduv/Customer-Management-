@@ -1,35 +1,49 @@
 package com.example.customer_management.controller;
 
-import com.example.customer_management.entity.Customer;
+import com.example.customer_management.dto.CustomerRequestDto;
+import com.example.customer_management.dto.CustomerResponseDto;
 import com.example.customer_management.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/customers")
 @CrossOrigin("*")
 public class CustomerController {
 
-    private final CustomerService service;
+    private final CustomerService customerService;
 
-    public CustomerController(CustomerService service) {
-        this.service = service;
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
     @PostMapping
-    public Customer save(@RequestBody @Valid Customer customer) {
-        return service.saveCustomer(customer);
+    public CustomerResponseDto createCustomer(
+            @Valid @RequestBody CustomerRequestDto requestDto) {
+        return customerService.createCustomer(requestDto);
+    }
+
+    @PutMapping("/{id}")
+    public CustomerResponseDto updateCustomer(
+            @PathVariable Long id,
+            @Valid @RequestBody CustomerRequestDto requestDto) {
+        return customerService.updateCustomer(id, requestDto);
+    }
+
+    @GetMapping("/{id}")
+    public CustomerResponseDto getCustomerById(@PathVariable Long id) {
+        return customerService.getCustomerById(id);
     }
 
     @GetMapping
-    public List<Customer> getAll() {
-        return service.getAllCustomers();
+    public List<CustomerResponseDto> getAllCustomers() {
+        return customerService.getAllCustomers();
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Service layer working!";
+    @PostMapping("/bulk-upload")
+    public String bulkUpload() {
+        return customerService.bulkUploadCustomers();
     }
 }
