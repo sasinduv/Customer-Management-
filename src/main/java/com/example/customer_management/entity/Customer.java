@@ -21,5 +21,8 @@ public class Customer {
 
     @Email(message = "Invalid email format")
     private String email;
+
+    private String nic;
+    private String Dob; 
 }
 

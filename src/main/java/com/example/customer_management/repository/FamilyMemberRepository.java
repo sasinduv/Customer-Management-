@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface FamilyMemberRepository extends JpaRepository<FamilyMember, Long> {
     List<FamilyMember> findByCustomerId(Long customerId);
-    
+   
+    void deleteByCustomerId(Long customerId);
 }

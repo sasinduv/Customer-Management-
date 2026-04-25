@@ -8,4 +8,5 @@ import java.util.List;
 public interface CustomerMobileRepository extends JpaRepository<CustomerMobile, Long> {
     List<CustomerMobile> findByCustomerId(Long customerId);
     
+    void deleteByCustomerId(Long customerId);
 }
