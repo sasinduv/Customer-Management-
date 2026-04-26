@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import javax.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -43,7 +44,7 @@ public class CustomerController {
     }
 
     @PostMapping("/bulk-upload")
-    public String bulkUpload() {
-        return customerService.bulkUploadCustomers();
+    public BulkUploadResultDto bulkUpload(
+        @RequestParam("file") MultipartFile file) {
+        return customerService.bulkUploadCustomers(file);
     }
-}

@@ -14,6 +14,9 @@ public class CustomerRequestDto {
     @NotBlank(message = "NIC is required")
     private String nic;
 
+    @Email(message = "Email is invalid")
+    private String email;
+
     private List<MobileDto> mobiles;
     private List<AddressDto> addresses;
     private List<Long> familyMemberIds;
@@ -26,7 +29,14 @@ public class CustomerRequestDto {
         this.name = name;
     }
 
-    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getDob() {
         return dob;
     }
