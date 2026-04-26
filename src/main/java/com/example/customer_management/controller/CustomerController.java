@@ -2,6 +2,7 @@ package com.example.customer_management.controller;
 
 import com.example.customer_management.dto.CustomerRequestDto;
 import com.example.customer_management.dto.CustomerResponseDto;
+import com.example.customer_management.dto.BulkUploadResultDto;
 import com.example.customer_management.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,3 +49,4 @@ public class CustomerController {
         @RequestParam("file") MultipartFile file) {
         return customerService.bulkUploadCustomers(file);
     }
+}

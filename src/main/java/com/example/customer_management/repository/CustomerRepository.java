@@ -15,5 +15,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> findByNameContaining(@Param("name") String name);
 
     boolean existsByNic(String nic);
+
+    Optional<Customer> findByNic(String nic);
 }    
 
