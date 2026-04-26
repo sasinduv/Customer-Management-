@@ -2,6 +2,8 @@ package com.example.customer_management.service;
 
 import com.example.customer_management.dto.CustomerRequestDto;
 import com.example.customer_management.dto.CustomerResponseDto;
+import com.example.customer_management.dto.BulkUploadResultDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,5 +17,5 @@ public interface CustomerService {
 
     List<CustomerResponseDto> getAllCustomers();
 
-    String bulkUploadCustomers();
+    BulkUploadResultDto bulkUploadCustomers(MultipartFile file);
 }

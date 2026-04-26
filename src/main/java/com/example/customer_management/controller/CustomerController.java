@@ -2,11 +2,13 @@ package com.example.customer_management.controller;
 
 import com.example.customer_management.dto.CustomerRequestDto;
 import com.example.customer_management.dto.CustomerResponseDto;
+import com.example.customer_management.dto.BulkUploadResultDto;
 import com.example.customer_management.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import javax.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -43,7 +45,8 @@ public class CustomerController {
     }
 
     @PostMapping("/bulk-upload")
-    public String bulkUpload() {
-        return customerService.bulkUploadCustomers();
+    public BulkUploadResultDto bulkUpload(
+        @RequestParam("file") MultipartFile file) {
+        return customerService.bulkUploadCustomers(file);
     }
 }
