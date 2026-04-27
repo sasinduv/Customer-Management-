@@ -12,8 +12,7 @@ This system is built as part of an academic assignment and demonstrates practica
 - ✅ Add new customers  
 - ✅ View all customers  
 - ✅ View customer by ID  
-- ✅ Update customer details  
-- ✅ Delete customers  
+- ✅ Update customer details   
 - ✅ RESTful API design  
 - ✅ Database integration using JPA  
 
