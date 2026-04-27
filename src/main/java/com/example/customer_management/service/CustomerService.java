@@ -17,5 +17,7 @@ public interface CustomerService {
 
     List<CustomerResponseDto> getAllCustomers();
 
+    List<CustomerResponseDto> searchCustomersByNic(String nic);
+
     BulkUploadResultDto bulkUploadCustomers(MultipartFile file);
 }

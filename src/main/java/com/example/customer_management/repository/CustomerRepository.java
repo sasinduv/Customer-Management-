@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    @Query("SELECT c FROM Customer c WHERE c.email = :email")
-    Optional<Customer> findByEmail(@Param("email") String email);
-
     @Query("SELECT c FROM Customer c WHERE c.name LIKE %:name%")
     List<Customer> findByNameContaining(@Param("name") String name);
+
+    @Query("SELECT c FROM Customer c WHERE c.nic LIKE %:nic%")
+    List<Customer> findByNicContaining(@Param("nic") String nic);
 
     boolean existsByNic(String nic);
 

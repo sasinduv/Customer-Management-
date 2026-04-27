@@ -44,6 +44,11 @@ public class CustomerController {
         return customerService.getAllCustomers();
     }
 
+    @GetMapping("/search")
+    public List<CustomerResponseDto> searchCustomersByNic(@RequestParam String nic) {
+        return customerService.searchCustomersByNic(nic);
+    }
+
     @PostMapping("/bulk-upload")
     public BulkUploadResultDto bulkUpload(
         @RequestParam("file") MultipartFile file) {
