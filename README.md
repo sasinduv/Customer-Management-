@@ -45,10 +45,14 @@ src/
 
 ---
 
-## ⚙️ Setup & Installation
+## ⚙️ Setup Instructions
 
-### 1️⃣ Clone the repository
+### 🔗 Clone the repository
 ```bash
-git clone https://github.com/sasinduv/customer-management-.git
-cd customer-management-
+git clone https://github.com/sasinduv/customer-management-backend.git
+cd customer-management-backend
+📦 Install dependencies
+.\mvnw clean install
+🚀 Run the application
+.\mvnw spring-boot:run
 
