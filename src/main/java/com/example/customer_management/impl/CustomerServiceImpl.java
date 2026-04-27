@@ -4,6 +4,8 @@ import com.example.customer_management.dto.*;
 import com.example.customer_management.entity.Customer;
 import com.example.customer_management.entity.CustomerAddress;
 import com.example.customer_management.entity.CustomerMobile;
+import com.example.customer_management.entity.City;
+import com.example.customer_management.entity.Country;
 import com.example.customer_management.entity.FamilyMember;
 import com.example.customer_management.repository.*;
 import com.example.customer_management.service.CustomerService;
@@ -28,17 +30,23 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerMobileRepository customerMobileRepository;
     private final CustomerAddressRepository customerAddressRepository;
     private final FamilyMemberRepository familyMemberRepository;
+    private final CityRepository cityRepository;
+    private final CountryRepository countryRepository;
 
     public CustomerServiceImpl(
             CustomerRepository customerRepository,
             CustomerMobileRepository customerMobileRepository,
             CustomerAddressRepository customerAddressRepository,
-            FamilyMemberRepository familyMemberRepository) {
+            FamilyMemberRepository familyMemberRepository,
+            CityRepository cityRepository,
+            CountryRepository countryRepository) {
 
         this.customerRepository = customerRepository;
         this.customerMobileRepository = customerMobileRepository;
         this.customerAddressRepository = customerAddressRepository;
         this.familyMemberRepository = familyMemberRepository;
+        this.cityRepository = cityRepository;
+        this.countryRepository = countryRepository;
     }
 
     // create customer
@@ -73,6 +81,8 @@ public class CustomerServiceImpl implements CustomerService {
             for (AddressDto a : requestDto.getAddresses()) {
                 CustomerAddress address = new CustomerAddress();
                 address.setAddressLine(a.getAddressLine());
+                address.setCountryId(resolveCountryId(a));
+                address.setCityId(resolveCityId(a));
                 address.setCustomerId(customerId);
 
                 customerAddressRepository.save(address);
@@ -125,6 +135,46 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setNic(requestDto.getNic());
         }
 
+        Long customerId = customer.getId();
+
+        customerMobileRepository.deleteByCustomerId(customerId);
+        customerAddressRepository.deleteByCustomerId(customerId);
+        familyMemberRepository.deleteByCustomerId(customerId);
+
+        if (requestDto.getMobiles() != null) {
+            for (MobileDto m : requestDto.getMobiles()) {
+                CustomerMobile mobile = new CustomerMobile();
+                mobile.setMobile(m.getMobile());
+                mobile.setCustomerId(customerId);
+                customerMobileRepository.save(mobile);
+            }
+        }
+
+        if (requestDto.getAddresses() != null) {
+            for (AddressDto a : requestDto.getAddresses()) {
+                CustomerAddress address = new CustomerAddress();
+                address.setAddressLine(a.getAddressLine());
+                address.setCountryId(resolveCountryId(a));
+                address.setCityId(resolveCityId(a));
+                address.setCustomerId(customerId);
+                customerAddressRepository.save(address);
+            }
+        }
+
+        if (requestDto.getFamilyMemberIds() != null) {
+            for (Long fId : requestDto.getFamilyMemberIds()) {
+                Customer family = customerRepository.findById(fId)
+                        .orElseThrow(() -> new RuntimeException("Family member not found: " + fId));
+
+                FamilyMember fm = new FamilyMember();
+                fm.setCustomerId(customerId);
+                fm.setMemberName(family.getName());
+                fm.setRelation("FAMILY");
+
+                familyMemberRepository.save(fm);
+            }
+        }
+
         Customer updatedCustomer = customerRepository.save(customer);
         return mapToResponse(updatedCustomer);
     }
@@ -134,6 +184,14 @@ public class CustomerServiceImpl implements CustomerService {
     public List<CustomerResponseDto> getAllCustomers() {
 
         return customerRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CustomerResponseDto> searchCustomersByNic(String nic) {
+        return customerRepository.findByNicContaining(nic)
                 .stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
@@ -299,7 +357,6 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerResponseDto dto = new CustomerResponseDto();
         dto.setId(customer.getId());
         dto.setName(customer.getName());
-        dto.setEmail(customer.getEmail());
         dto.setDob(customer.getDob());
         dto.setNic(customer.getNic());
 
@@ -327,6 +384,15 @@ public class CustomerServiceImpl implements CustomerService {
                     AddressDto ad = new AddressDto();
                     ad.setId(a.getId());
                     ad.setAddressLine(a.getAddressLine());
+                    ad.setCityId(a.getCityId());
+                    ad.setCountryId(a.getCountryId());
+                    if (a.getCityId() != null) {
+                        cityRepository.findById(a.getCityId()).ifPresent(city -> ad.setCityName(city.getName()));
+                    }
+                    if (a.getCountryId() != null) {
+                        countryRepository.findById(a.getCountryId())
+                                .ifPresent(country -> ad.setCountryName(country.getName()));
+                    }
                     return ad;
                 })
                 .collect(Collectors.toList());
@@ -349,6 +415,46 @@ public class CustomerServiceImpl implements CustomerService {
         dto.setFamilyMembers(familyDtos);
 
         return dto;
+    }
+
+    private Long resolveCountryId(AddressDto addressDto) {
+        if (addressDto.getCountryId() != null) {
+            return addressDto.getCountryId();
+        }
+
+        String countryName = addressDto.getCountryName();
+        if (countryName == null || countryName.trim().isEmpty()) {
+            return null;
+        }
+
+        String normalizedCountryName = countryName.trim();
+        return countryRepository.findByNameIgnoreCase(normalizedCountryName)
+                .map(Country::getId)
+                .orElseGet(() -> {
+                    Country country = new Country();
+                    country.setName(normalizedCountryName);
+                    return countryRepository.save(country).getId();
+                });
+    }
+
+    private Long resolveCityId(AddressDto addressDto) {
+        if (addressDto.getCityId() != null) {
+            return addressDto.getCityId();
+        }
+
+        String cityName = addressDto.getCityName();
+        if (cityName == null || cityName.trim().isEmpty()) {
+            return null;
+        }
+
+        String normalizedCityName = cityName.trim();
+        return cityRepository.findByNameIgnoreCase(normalizedCityName)
+                .map(City::getId)
+                .orElseGet(() -> {
+                    City city = new City();
+                    city.setName(normalizedCityName);
+                    return cityRepository.save(city).getId();
+                });
     }
 
 }

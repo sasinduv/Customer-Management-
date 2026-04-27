@@ -14,6 +14,10 @@ public class CustomerAddress {
     private Long id;
 
     private String addressLine;
+    
+    private Long cityId;
+    
+    private Long countryId;
 
     private Long customerId;
 }
